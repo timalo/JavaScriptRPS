@@ -1,3 +1,6 @@
+let playerScore = 0;
+let computerScore = 0;
+
 function computerPlay() {
     let choices = ['Rock', 'Paper', 'Scissors'];
     let rand = (Math.floor(Math.random() * 3)); //return random int between 0 and 2
@@ -29,21 +32,55 @@ function playRound(playerChoice, computerChoice) {
     }
 }
 
-function playGame() {
-    let playerScore = 0;
-    let computerScore = 0;
-    for (let i = 0; i < 5; i++) {
-        let playerChoice = prompt(`Give a choice for round number ${i+1}/5:`);
-        let computerChoice = computerPlay();
-        let gameResult = playRound(playerChoice, computerChoice);
-        console.log(gameResult); //Print the result of the round
-        if(gameResult.substring(4, 7) == 'win'){
-            playerScore++;
-        }
-        if(gameResult.substring(4, 8) == 'lose'){
-            computerScore++;
-        }
+function playGame(playerChoice) {
+    let computerChoice = computerPlay();
+    let gameResult = playRound(playerChoice, computerChoice);
+    console.log(gameResult); //Print the result of the round
+    if(gameResult.substring(4, 7) == 'win'){
+        playerScore++;
     }
-    console.log(`Player Score: ${playerScore}`);
-    console.log(`Computer Score: ${computerScore}`);
+    if(gameResult.substring(4, 8) == 'lose'){
+        computerScore++;
+    }
+    updateScore(gameResult);
+    checkScore();
 }
+
+function checkScore() {
+    if(playerScore == 5) {
+        resultDiv.textContent = "Player wins!";
+        resultDiv.style.backgroundColor = "green";
+    }
+    else if(computerScore == 5) {
+        resultDiv.textContent = "Computer wins!";
+        resultDiv.style.backgroundColor = "red";
+    }
+}
+
+function updateScore(gameResult) {
+    roundResultDiv.textContent = gameResult;
+    playerScoreText.textContent = `Player score: ${playerScore}`;
+    computerScoreText.textContent = `Computer score: ${computerScore}`;
+}
+
+const rockButton = document.querySelector('#rockBtn');
+const paperButton = document.querySelector('#paperBtn');
+const scissorButton = document.querySelector('#scissorsBtn');
+
+rockButton.addEventListener("click", function(){
+    playGame('rock');
+});
+paperButton.addEventListener("click", function() {
+    playGame('paper');
+});
+scissorButton.addEventListener("click", function() {
+    playGame('scissors');
+});
+
+const roundResultDiv = document.querySelector('#roundResult');
+
+const resultDiv = document.querySelector('#gameResult');
+
+const playerScoreText = document.querySelector('#playerScore');
+const computerScoreText = document.querySelector('#computerScore');
+
